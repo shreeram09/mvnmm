@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.shreeram</groupId>
+  <artifactId>mvnmm</artifactId>
+  <version>1.0</version>
+	</parent>
+
+  <artifactId>mvnmm-ear</artifactId>
+  <version>1.0</version>
+  <packaging>ear</packaging>
+
+  <name>mvnmm-ear</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<server.home>C:\program files\jboss-5.1.0.GA</server.home>
+	<server.domain>${server.home}\server\myDomain</server.domain>
+  </properties>
+
+    <build>
+        <plugins>
+			<plugin>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<generateApplicationXml>true</generateApplicationXml>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<modules>
+						<ejbModule>
+							<groupId>com.shreeram</groupId>
+							<artifactId>mvnmm-ejb</artifactId>
+						</ejbModule>
+						<webModule>
+							<groupId>com.shreeram</groupId>
+							<artifactId>mvnmm-web</artifactId>
+							<contextRoot>/mvnmm</contextRoot>
+						</webModule>
+					</modules>
+				</configuration>
+			</plugin>
+			<plugin>
+			 <groupId>org.codehaus.cargo</groupId>
+			 <artifactId>cargo-maven3-plugin</artifactId>
+			 <configuration>
+					   <container>
+								<containerId>jboss51x</containerId>
+								<home>${server.home}</home>
+								<type>installed</type>
+					   </container>
+					   <configuration>
+								<type>existing</type>
+								<home>${server.domain}</home>
+								<properties>
+									<cargo.servlet.port>8085</cargo.servlet.port>
+									<cargo.jboss.configuration>myDomain</cargo.jboss.configuration>
+								</properties>
+					   </configuration>
+					   <deployables>
+							<deployable>
+								<groupId>${project.groupId}</groupId>
+								<artifactId>${project.artifactId}</artifactId>
+								<type>${project.packaging}</type>
+							</deployable>
+						</deployables>
+			 </configuration>
+			 <dependencies>
+					   <dependency>
+								<groupId>org.jboss.integration</groupId>
+								<artifactId>jboss-profileservice-spi</artifactId>
+								<version>5.1.0.GA</version>
+					   </dependency>
+					   <dependency>
+								<groupId>org.jboss.jbossas</groupId>
+								<artifactId>jboss-as-client</artifactId>
+								<version>5.1.0.GA</version>
+								<type>pom</type>
+					   </dependency>
+			 </dependencies>
+</plugin>
+        </plugins>
+    </build>    
+    
+      <dependencies>
+         <dependency>
+            <groupId>com.shreeram</groupId>
+            <artifactId>mvnmm-ejb</artifactId>
+            <version>1.0</version>
+            <type>ejb</type>
+         </dependency>
+
+         <dependency>
+            <groupId>com.shreeram</groupId>
+            <artifactId>mvnmm-web</artifactId>
+            <version>1.0</version>
+            <type>war</type>
+         </dependency>
+
+      </dependencies>
+	
+	
+</project>
